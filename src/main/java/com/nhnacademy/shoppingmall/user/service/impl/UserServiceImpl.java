@@ -1,13 +1,8 @@
 package com.nhnacademy.shoppingmall.user.service.impl;
 
-import com.nhnacademy.shoppingmall.user.domain.User;
-import com.nhnacademy.shoppingmall.user.exception.UserAlreadyExistsException;
-import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
-import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import com.nhnacademy.shoppingmall.user.service.UserService;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
+import com.nhnacademy.shoppingmall.user.domain.User;
+import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -18,45 +13,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String userId){
-        //todo#13 회원조회
-        return userRepository.findById(userId).orElse(null);
+        //todo#4-1 회원조회
+        return null;
     }
 
     @Override
     public void saveUser(User user) {
-        //todo#14 회원등록
-        checkExistUser(user.getUserId());
-        userRepository.save(user);
+        //todo#4-2 회원등록
+
     }
 
     @Override
     public void updateUser(User user) {
-        //todo#15 회원수정
-        checkExistUser(user.getUserId());
-        userRepository.update(user);
+        //todo#4-3 회원수정
     }
 
     @Override
     public void deleteUser(String userId) {
-        //todo#16 회원삭제
-        checkExistUser(userId);
-        userRepository.deleteByUserId(userId);
+        //todo#4-4 회원삭제
     }
 
     @Override
     public User doLogin(String userId, String userPassword) {
-        //todo#17 로그인구현
-        Optional<User> userOptional = userRepository.findByUserIdAndUserPassword(userId,userPassword);
-        if(!userOptional.isPresent()){
-            throw new UserNotFoundException(userId);
-        }
-        userRepository.updateLatestLoginAtByUserId(userId, LocalDateTime.now());
-        return userOptional.get();
+        //todo#4-5 로그인 구현, userId, userPassword로 일치하는 회원 조회
+        return null;
     }
-    
-    private void checkExistUser(String userId){
-        if(userRepository.countByUserId(userId)>0){
-            throw new UserAlreadyExistsException(userId);
-        }
-    }
+
 }

@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.common.initialize;
 
+import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.common.mvc.controller.ControllerFactory;
 import lombok.extern.slf4j.Slf4j;
 import javax.servlet.ServletContainerInitializer;
@@ -11,7 +12,7 @@ import java.util.Set;
 @Slf4j
 @HandlesTypes(
         value = {
-                com.nhnacademy.shoppingmall.common.mvc.controller.BaseController.class
+                BaseController.class
         }
 )
 public class WebAppInitializer implements ServletContainerInitializer {

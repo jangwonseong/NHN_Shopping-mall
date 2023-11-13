@@ -36,7 +36,7 @@ private Command resolveCommand(String servletPath, String method){
 include::{docdir}/../../src/main/java/com/nhnacademy/shoppingmall/common/mvc/annotation/RequestMapping.java[]
 ----
 
-* Servlet과 url을 맵핑하기 위해서 @WebServlet annotation을 사용합니다.
+* Servlet과 url을 맵핑하기 위해서 @WebServlet을 사용합니다.
 
 [source,java]
 ----
@@ -46,7 +46,7 @@ public class FrontServlet extends HttpServlet {
 }
 ----
 
-* @WebServlet anootation 처럼 비슷하게 동작할 수 있는 @RequestMapping annotation을 정의하고 method (GET|POST)와 요청 경로("/index.do") 맵핑되어 실행될 수 있도록 개선 합니다.
+* @WebServlet 처럼 비슷하게 동작할 수 있는 `@RequestMapping` 을 정의하고 method (GET|POST) + 요청경로("/index.do")가 맵핑되어 실행될 수 있도록 개선합니다.
 
 [source,java]
 ----
@@ -55,17 +55,20 @@ include::../../src/main/java/com/nhnacademy/shoppingmall/controller/index/IndexC
 
 == 구현
 
+* link:../../src/main/java/com/nhnacademy/shoppingmall/common/mvc/controller/ControllerFactory.java[ControllerFactory.java]의 todo를 구현합니다.
+
+
 [source,java]
 ----
 include::../../src/main/java/com/nhnacademy/shoppingmall/common/mvc/controller/ControllerFactory.java[]
 ----
 
 == Test Code
-*  link:../../src/test/java/com/nhnacademy/shoppingmall/common/mvc/controller/ControllerFactoryTest.java[ControllerFactoryTest.java] Test Code를 통과해야 합니다.
+*  link:../../src/test/java/com/nhnacademy/shoppingmall/check/common/mvc/controller/ControllerFactoryTest.java[ControllerFactoryTest.java] Test Code를 통과해야 합니다.
 
 [source,java]
 ----
-include::../../src/test/java/com/nhnacademy/shoppingmall/common/mvc/controller/ControllerFactoryTest.java[]
+include::../../src/test/java/com/nhnacademy/shoppingmall/check/common/mvc/controller/ControllerFactoryTest.java[]
 ----
 
 == Reference
