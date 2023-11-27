@@ -3,13 +3,11 @@ package com.nhnacademy.shoppingmall.check.user.service.impl;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.exception.UserAlreadyExistsException;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
-import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
-import com.nhnacademy.shoppingmall.user.service.UserService;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
+import com.nhnacademy.shoppingmall.user.service.UserService;
 import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,16 +26,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
-    UserRepository userRepository = Mockito.mock(UserRepositoryImpl.class);
+    UserRepository userRepository = Mockito.mock(UserRepository.class);
     UserService userService = new UserServiceImpl(userRepository);
     User testUser = testUser=new User("nhnacademy-test-user","nhn아카데미","nhnacademy-test-password","19900505", User.Auth.ROLE_USER,100_0000, LocalDateTime.now(),LocalDateTime.now());
-
-    @Test
-    @DisplayName("instance of UserRepository")
-    @Disabled
-    void instance_of_userRepository(){
-        Assertions.assertInstanceOf(UserRepository.class, new UserRepositoryImpl());
-    }
 
     @Test
     @DisplayName("getUser")
@@ -78,7 +69,7 @@ class UserServiceImplTest {
     @Test
     @DisplayName("update user")
     void updateUser() {
-        Mockito.when(userRepository.countByUserId(anyString())).thenReturn(0);
+        Mockito.when(userRepository.countByUserId(anyString())).thenReturn(1);
         Mockito.when(userRepository.update(testUser)).thenReturn(1);
         userService.updateUser(testUser);
         Mockito.verify(userRepository,Mockito.times(1)).update(any());
@@ -89,7 +80,7 @@ class UserServiceImplTest {
     @DisplayName("delete user")
     void deleteUser() {
         Mockito.when(userRepository.deleteByUserId(anyString())).thenReturn(1);
-        Mockito.when(userRepository.countByUserId(anyString())).thenReturn(0);
+        Mockito.when(userRepository.countByUserId(anyString())).thenReturn(1);
 
         userService.deleteUser(testUser.getUserId());
 
