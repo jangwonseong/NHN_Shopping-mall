@@ -48,9 +48,8 @@ class UserRepositoryImplTest {
     @Disabled
     void findByUserIdAndUserPassword_sql_injection(){
         //테스트 코드가 통과할 수 있도록  userRepository.findByUserIdAndUserPassword를 수정하세요.
-        String id="nhnacademy-test-user";
         String password="' or '1'='1";
-        Optional<User> userOptional = userRepository.findByUserIdAndUserPassword(testUser.getUserId(),testUser.getUserPassword());
+        Optional<User> userOptional = userRepository.findByUserIdAndUserPassword(testUser.getUserId(),password);
         log.debug("user:{}",userOptional.orElse(null));
         Assertions.assertFalse(userOptional.isPresent());
     }
