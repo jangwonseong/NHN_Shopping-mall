@@ -20,7 +20,7 @@ CREATE TABLE `users` (
   `user_birth` varchar(8) NOT NULL COMMENT '생년월일 : 19840503',
   `user_auth` varchar(10) NOT NULL COMMENT '권한: ROLE_ADMIN,ROLE_USER',
   `user_point` int NOT NULL COMMENT 'default : 1000000',
-  `created_at` datetime NOT NULL COMMENT '가입일자',
+  `created_at` datetime NOT NULL COMMENT '가입 일자',
   `latest_login_at` datetime DEFAULT NULL COMMENT '마지막 로그인 일자',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='회원';
@@ -30,7 +30,7 @@ CREATE TABLE `users` (
 * https://www.erdcloud.com[erdcloud.com]을 사용할 수 있습니다.(필수는 아님)
 
 == ERD 제출
-* link:../../submit/erd/[/submit/erd]경로에 이미지 파일을 제출합니다.
+* link:../../submit/erd/[/submit/erd] 경로에 이미지 파일을 제출합니다.
 
 == DDL Script 제출
 * link:../../submit/erd/script.sql[/submit/erd/script.sql] 파일에 작성합니다.

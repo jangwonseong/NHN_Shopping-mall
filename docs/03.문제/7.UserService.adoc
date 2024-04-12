@@ -18,7 +18,7 @@ include::{docdir}/../../src/main/java/com/nhnacademy/shoppingmall/user/service/i
 
 == Test Code
 
-* link:../../src/test/java/com/nhnacademy/shoppingmall/user/service/impl/UserServiceImplTest.java[UserServiceImplTest]를 통과해야 합니다.
+* link:../../src/test/java/com/nhnacademy/shoppingmall/user/service/impl/UserServiceImplTest.java[UserServiceImplTest] 를 통과해야 합니다.
 
 [source,java]
 ----

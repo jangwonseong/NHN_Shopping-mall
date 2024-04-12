@@ -2,7 +2,7 @@
 
 == Database 연결
 
-* DBCP2를 설정합니다.
+* `DBCP2` 를 설정합니다.
 * mysql 계정은 아래 링크를 참고합니다.
 ** https://nhnacademy.dooray.com/task/3570281639368311346/3666108764522311867
 * initialSize, maxTotal, maxIdle, minIdle 은 모두 5로 설정합니다.
