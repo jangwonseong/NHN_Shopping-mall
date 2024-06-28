@@ -10,7 +10,7 @@ include::{docdir}/../../src/main/java/com/nhnacademy/shoppingmall/user/repositor
 == UserRepositoryImpl
 
 * UserRepository interface를 구현합니다.
-* todo#3-1 sql insertion이 발생하지 않도록 수정합니다.
+* todo#3-1 sql injection이 발생하지 않도록 수정합니다.
 
 [source,java]
 ----

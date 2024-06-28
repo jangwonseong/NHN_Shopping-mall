@@ -1,6 +1,5 @@
 = 쇼핑몰 Web Application 개발
 
-* 데이터베이스 교육에서 팀별로 설계한 쇼핑몰 ERD를 기반으로 Application을 구현합니다.
 * 모든 기능은 Servlet/JSP 환경에서 구현합니다.
 
 == 참고
