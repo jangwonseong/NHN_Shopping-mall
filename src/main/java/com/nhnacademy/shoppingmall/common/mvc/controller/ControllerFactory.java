@@ -1,9 +1,12 @@
 package com.nhnacademy.shoppingmall.common.mvc.controller;
 
+import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
+import com.nhnacademy.shoppingmall.common.mvc.exception.ControllerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,11 +14,12 @@ import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
 public class ControllerFactory {
-    public static final String CONTEXT_CONTROLLER_FACTORY_NAME="CONTEXT_CONTROLLER_FACTORY";
+    public static final String CONTEXT_CONTROLLER_FACTORY_NAME = "CONTEXT_CONTROLLER_FACTORY";
     private final ConcurrentMap<String, Object> beanMap = new ConcurrentHashMap<>();
-    public void initialize(Set<Class<?>> c, ServletContext ctx){
 
-        if(Objects.isNull(c)){
+    public void initialize(Set<Class<?>> c, ServletContext ctx) {
+
+        if (Objects.isNull(c)) {
             log.info("Controller not found");
             return;
         }
@@ -31,35 +35,65 @@ public class ControllerFactory {
          * 3. @RequestMapping(method = RequestMapping.Method.GET,value = {"/index.do","/main.do"}) 처럼 value는 String 배열일 수 있습니다.
          *  즉 /index.do, /main.do -> IndexController로 맵핑 됩니다.
          */
+        // 모든 컨트롤러 클래스를 순회
+        for (Class<?> controllerClass : c) {
+            // BaseController를 구현한 클래스만 처리
+            if (BaseController.class.isAssignableFrom(controllerClass)) {
+                // @RequestMapping 어노테이션 확인
+                RequestMapping requestMapping = controllerClass.getAnnotation(RequestMapping.class);
+                if (requestMapping != null) {
+                    RequestMapping.Method method = requestMapping.method();
+                    String[] values = requestMapping.value();
 
-
-        //#todo5-2 ctx(ServletContext)에  attribute를 추가합니다. -> key : CONTEXT_CONTROLLER_FACTORY_NAME, value : ControllerFactory
-
+                    for (String value : values) {
+                        String key = method.name() + "-" + value; // ex> GET-/index.do
+                        try {
+                            Object controllerInstance = controllerClass.getDeclaredConstructor().newInstance();
+                            beanMap.put(key, controllerInstance);
+                            log.debug("Mapped {} to {}", key, controllerClass.getName());
+                        } catch (Exception e) {
+                            log.error("Controller instantiation failed: {}", controllerClass.getName(), e);
+                        }
+                    }
+                }
+            }
+            //#todo5-2 ctx(ServletContext)에  attribute를 추가합니다. -> key : CONTEXT_CONTROLLER_FACTORY_NAME, value : ControllerFactory
+            ctx.setAttribute(CONTEXT_CONTROLLER_FACTORY_NAME, this);
+        }
     }
 
-    private Object getBean(String key){
+    private Object getBean(String key) {
         //todo#5-3 beanMap에서 controller 객체를 반환 합니다.
-
-        return null;
+        return beanMap.get(key);
     }
 
-    public Object getController(HttpServletRequest request){
+    public Object getController(HttpServletRequest request) {
         //todo#5-4 request의 method, servletPath를 이용해서 Controller 객체를 반환합니다.
-
-        return null;
+        String method = request.getMethod().toUpperCase();
+        String servletPath = request.getServletPath();
+        String key = method + "-" + servletPath;
+        Object controller = beanMap.get(key);
+        if (controller == null) {
+            throw new ControllerNotFoundException("Controller not found");
+        }
+        return controller;
     }
 
-    public Object getController(String method, String path){
+    public Object getController(String method, String path) {
         //todo#5-5 method, path를 이용해서 Controller 객체를 반환 합니다.
-
-        return null;
+        String key = method + "-" + path;
+        Object controller = beanMap.get(key);
+        if (controller == null) {
+            throw new ControllerNotFoundException("Controller not found");
+        }
+        return controller;
     }
 
-    private String getKey(String method, String path){
+    private String getKey(String method, String path) {
         //todo#5-6  {method}-{key}  형식으로 Key를 반환 합니다.
         //ex GET-/index.do
         //ex POST-/loginAction.do
 
-        return "";
+        return String.format("%s-%s", method.toUpperCase(), path);
     }
 }
