@@ -5,6 +5,7 @@ import com.nhnacademy.shoppingmall.common.mvc.view.ViewResolver;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.common.mvc.controller.ControllerFactory;
 
+
 import lombok.extern.slf4j.Slf4j;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -24,7 +25,7 @@ public class FrontServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         //todo#7-1 controllerFactory를 초기화 합니다.
-        controllerFactory = new ControllerFactory();
+        controllerFactory = (ControllerFactory) getServletContext().getAttribute("CONTEXT_CONTROLLER_FACTORY");
 
         //todo#7-2 viewResolver를 초기화 합니다.
         viewResolver = new ViewResolver("/WEB-INF/views/", ".jsp");
@@ -55,7 +56,6 @@ public class FrontServlet extends HttpServlet {
             log.error("error:{}", e);
             DbConnectionThreadLocal.setSqlError(true);
             //todo#7-5 예외가 발생하면 해당 예외에 대해서 적절한 처리를 합니다.
-            DbConnectionThreadLocal.reset();
         } finally {
             //todo#7-4 connection을 반납합니다.
             DbConnectionThreadLocal.reset();

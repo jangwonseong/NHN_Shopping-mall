@@ -38,24 +38,23 @@ public class ControllerFactory {
         // 모든 컨트롤러 클래스를 순회
         for (Class<?> controllerClass : c) {
             // BaseController를 구현한 클래스만 처리
-            if (BaseController.class.isAssignableFrom(controllerClass)) {
-                // @RequestMapping 어노테이션 확인
-                RequestMapping requestMapping = controllerClass.getAnnotation(RequestMapping.class);
-                if (requestMapping != null) {
-                    RequestMapping.Method method = requestMapping.method();
-                    String[] values = requestMapping.value();
+            // @RequestMapping 어노테이션 확인
+            RequestMapping requestMapping = controllerClass.getAnnotation(RequestMapping.class);
+            if (requestMapping != null) {
+                RequestMapping.Method method = requestMapping.method();
+                String[] values = requestMapping.value();
 
-                    for (String value : values) {
-                        String key = method.name() + "-" + value; // ex> GET-/index.do
-                        try {
-                            Object controllerInstance = controllerClass.getDeclaredConstructor().newInstance();
-                            beanMap.put(key, controllerInstance);
-                            log.debug("Mapped {} to {}", key, controllerClass.getName());
-                        } catch (Exception e) {
-                            log.error("Controller instantiation failed: {}", controllerClass.getName(), e);
-                        }
+                for (String value : values) {
+                    String key = getKey(method.name().toUpperCase(), value); // ex> GET-/index.do
+                    try {
+                        Object controllerInstance = controllerClass.getDeclaredConstructor().newInstance();
+                        beanMap.put(key, controllerInstance);
+                        log.debug("Mapped {} to {}", key, controllerClass.getName());
+                    } catch (Exception e) {
+                        log.error("Controller instantiation failed: {}", controllerClass.getName(), e);
                     }
                 }
+
             }
             //#todo5-2 ctx(ServletContext)에  attribute를 추가합니다. -> key : CONTEXT_CONTROLLER_FACTORY_NAME, value : ControllerFactory
             ctx.setAttribute(CONTEXT_CONTROLLER_FACTORY_NAME, this);
@@ -71,8 +70,8 @@ public class ControllerFactory {
         //todo#5-4 request의 method, servletPath를 이용해서 Controller 객체를 반환합니다.
         String method = request.getMethod().toUpperCase();
         String servletPath = request.getServletPath();
-        String key = method + "-" + servletPath;
-        Object controller = beanMap.get(key);
+        String key = getKey(method, servletPath);
+        Object controller = getBean(key);
         if (controller == null) {
             throw new ControllerNotFoundException("Controller not found");
         }
