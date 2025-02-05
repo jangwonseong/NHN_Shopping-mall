@@ -12,5 +12,4 @@ public interface ProductRepository {
     List<Product> findByCategoryId(String categoryId);
     List<Product> findAll();
     List<Product> findByPriceRange(int minPrice, int maxPrice);
-    int countByProductId(String productId);  // 상품 존재 여부 확인
 }
