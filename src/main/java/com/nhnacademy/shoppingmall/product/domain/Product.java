@@ -9,6 +9,7 @@ public class Product {
     private String productDescription;
     private int productPrice;
     private int productStock;
+    private int quantity;
 
     public Product(String productId, String categoryId, String productName, String productDescription, int productPrice, int productStock) {
         this.productId = productId;
@@ -58,6 +59,14 @@ public class Product {
 
     public void setProductStock(int productStock) {
         this.productStock = productStock;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     @Override

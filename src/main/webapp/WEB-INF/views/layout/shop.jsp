@@ -51,8 +51,8 @@
 
                 <!-- 로그인 및 회원가입 버튼 -->
                 <div class="text-end">
-                    <a href="/login" class="btn btn-light">로그인</a>
-                    <a href="/signup" class="btn btn-light">회원가입</a>
+                    <a href="/loginAction.do" class="btn btn-light">로그인</a>
+                    <a href="/signup.do" class="btn btn-light">회원가입</a>
                 </div>
 
                 <div class = "shopping-cart">
