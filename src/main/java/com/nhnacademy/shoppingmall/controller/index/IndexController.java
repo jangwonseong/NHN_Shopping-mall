@@ -10,6 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class IndexController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        return "shop/main/index";
+        return "/shop/main/index";
     }
 }

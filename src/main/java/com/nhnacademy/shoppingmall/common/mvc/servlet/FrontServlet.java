@@ -62,8 +62,6 @@ public class FrontServlet extends HttpServlet {
             //todo#7-4 connection을 반납합니다.
             DbConnectionThreadLocal.reset();
 
-
-
         }
     }
 }
