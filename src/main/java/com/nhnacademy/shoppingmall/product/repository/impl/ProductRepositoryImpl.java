@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class ProductRespositoryImpl implements ProductRepository {
+public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public int save(Product product) {
