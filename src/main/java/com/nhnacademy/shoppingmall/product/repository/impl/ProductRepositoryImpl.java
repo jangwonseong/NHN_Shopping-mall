@@ -19,7 +19,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public int save(Product product) {
         Connection connection = DbConnectionThreadLocal.getConnection();
-        String sql = "INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ptmt = connection.prepareStatement(sql)) {
             ptmt.setString(1, product.getProductId());
@@ -28,7 +28,6 @@ public class ProductRepositoryImpl implements ProductRepository {
             ptmt.setString(4, product.getProductDescription());
             ptmt.setInt(5, product.getProductPrice());
             ptmt.setInt(6, product.getProductStock());
-
             return ptmt.executeUpdate();
         } catch (SQLException e) {
             log.error("품목 저장 실패 - 사용자 ID: {}, SQL 상태: {}, 에러 코드: {}, 메시지: {}",
@@ -83,7 +82,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Optional<Product> findById(String productId) {
         Connection connection = DbConnectionThreadLocal.getConnection();
-        String sql = "SELECT * FROM users WHERE productId = ?";
+        String sql = "SELECT * FROM products WHERE product_id = ?";
 
         try (PreparedStatement ptmt = connection.prepareStatement(sql)) {
             ptmt.setString(1, productId);
@@ -93,7 +92,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                             rs.getString("product_id"),
                             rs.getString("category_id"),
                             rs.getString("product_name"),
-                            rs.getString("product_contents"),
+                            rs.getString("description"),
                             rs.getInt("product_price"),
                             rs.getInt("product_stock")
                     ));
@@ -121,7 +120,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                             rs.getString("product_id"),
                             rs.getString("category_id"),
                             rs.getString("product_name"),
-                            rs.getString("product_contents"),
+                            rs.getString("description"),
                             rs.getInt("product_price"),
                             rs.getInt("product_stock")
                     ));
@@ -150,7 +149,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                         rs.getString("product_id"),
                         rs.getString("category_id"),
                         rs.getString("product_name"),
-                        rs.getString("product_contents"),
+                        rs.getString("description"),
                         rs.getInt("product_price"),
                         rs.getInt("product_stock")
                 ));
@@ -180,7 +179,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                             rs.getString("product_id"),
                             rs.getString("category_id"),
                             rs.getString("product_name"),
-                            rs.getString("product_contents"),
+                            rs.getString("description"),
                             rs.getInt("product_price"),
                             rs.getInt("product_stock")
                     ));

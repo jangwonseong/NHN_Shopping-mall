@@ -1,12 +1,13 @@
 package com.nhnacademy.shoppingmall.user.repository;
 
 import com.nhnacademy.shoppingmall.user.domain.User;
+import com.nhnacademy.shoppingmall.user.dto.LoginResponse;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface UserRepository {
-    Optional<User> findByUserIdAndUserPassword(String userId, String userPassword);
+    Optional<LoginResponse> findByUserIdAndUserPassword(String userId, String userPassword);
     Optional<User> findById(String userId);
     int save(User user);
     int deleteByUserId(String userId);

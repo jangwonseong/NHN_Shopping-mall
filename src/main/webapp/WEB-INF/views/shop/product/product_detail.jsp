@@ -16,7 +16,7 @@
 <p>카테고리: <%= request.getAttribute("productCategory") %></p>
 <p>상세 정보: <%= request.getAttribute("productDescription") %></p>
 
-<form method="post" action="/order.do">
+<form method="post" action="/productDetail.do">
     <input type="hidden" name="productId" value="<%= request.getAttribute("productId") %>">
     <button type="submit">구매하기</button>
 </form>

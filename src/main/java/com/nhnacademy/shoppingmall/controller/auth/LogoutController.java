@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpSession;
 public class LogoutController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        // session이 있으면 무효화(INVALIDATE) 처리
         HttpSession session = req.getSession(false);
         if (session != null) {
             session.invalidate();
@@ -18,4 +17,3 @@ public class LogoutController implements BaseController {
         return "redirect:/login.do";
     }
 }
-

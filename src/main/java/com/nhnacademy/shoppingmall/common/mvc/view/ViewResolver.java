@@ -1,4 +1,7 @@
 package com.nhnacademy.shoppingmall.common.mvc.view;
+
+import java.util.Objects;
+
 public class ViewResolver {
 
     public static final String DEFAULT_PREFIX="/WEB-INF/views/";
@@ -21,6 +24,9 @@ public class ViewResolver {
 
     public  String getPath(String viewName){
         //todo#6-1  prefix+viewNAme+postfix 반환 합니다.
+        if(Objects.isNull(viewName)){
+            return null;
+        }
         String processedViewName = viewName.startsWith("/")
                 ? viewName.substring(1)
                 : viewName;
@@ -29,6 +35,9 @@ public class ViewResolver {
 
     public boolean isRedirect(String viewName){
         //todo#6-2 REDIRECT_PREFIX가 포함되어 있는지 체크 합니다.
+        if(Objects.isNull(viewName)){
+            return false;
+        }
         return viewName.toLowerCase().startsWith(REDIRECT_PREFIX.toLowerCase());
     }
 
@@ -47,6 +56,6 @@ public class ViewResolver {
            /admin/경로가 포함되어 있지않다면 DEFAULT_SHOP_LAYOUT 반환 합니다.
         */
         String path = getPath(viewName);
-        return path.contains("/admin") ? DEFAULT_ADMIN_LAYOUT : DEFAULT_SHOP_LAYOUT;
+        return Objects.nonNull(path) && path.contains("/admin") ? DEFAULT_ADMIN_LAYOUT : DEFAULT_SHOP_LAYOUT;
     }
 }

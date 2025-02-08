@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" trimDirectiveWhitespaces="true" session="false" %>
 
+<%--
+login_form.jsp
+--%>
 <div style="margin: auto; width: 400px;">
     <div class="p-2">
         <form method="post" action="/loginAction.do">

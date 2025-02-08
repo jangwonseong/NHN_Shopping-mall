@@ -17,7 +17,7 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime latestLoginAt;
 
-    public User (String userId, String userName, String userPassword, String userBirth, Auth userAuth, int userPoint, LocalDateTime createdAt, LocalDateTime latestLoginAt ){
+    public User (String userId, String userName, String userPassword, String userBirth, Auth userAuth, int userPoint, LocalDateTime createdAt, LocalDateTime latestLoginAt){
         this.userId = userId;
         this.userName = userName;
         this.userPassword = userPassword;
@@ -26,6 +26,7 @@ public class User {
         this.userPoint = userPoint;
         this.createdAt = createdAt;
         this.latestLoginAt=latestLoginAt;
+
     }
 
     public String getUserId() {
@@ -79,6 +80,7 @@ public class User {
     public void setUserPoint(int userPoint) {
         this.userPoint = userPoint;
     }
+
 
     @Override
     public boolean equals(Object o) {

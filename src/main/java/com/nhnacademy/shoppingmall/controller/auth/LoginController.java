@@ -18,6 +18,7 @@ public class LoginController implements BaseController {
         if (session == null || session.getAttribute("user") == null) {
             return "/shop/login/login_form";
         }
+
         return "redirect:/index.do";
     }
 }

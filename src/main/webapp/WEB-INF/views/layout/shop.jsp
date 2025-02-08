@@ -5,7 +5,9 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ taglib prefix="x" uri="jakarta.tags.xml" %>
 <%@ taglib prefix="sql" uri="jakarta.tags.sql" %>
-
+<%--
+/home/nhnacademy/Desktop/ATGN02-014/shopping-mall/src/main/webapp/WEB-INF/views/layout/shop.jsp
+--%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -16,7 +18,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- 웹 페이지 제목 설정 -->
-    <title>KREAM</title>
+    <title>CREAM</title>
 
     <!-- Bootstrap CSS 라이브러리 불러오기 (CDN 사용) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">

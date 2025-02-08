@@ -25,7 +25,6 @@ public class PlaceOrderController implements BaseController {
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String userId = req.getParameter("userId");
         int totalPrice = Integer.parseInt(req.getParameter("totalPrice"));
-
         List<OrderItem> orderItems = new ArrayList<>();
 
         Order order = new Order(UUID.randomUUID().toString(), userId, totalPrice, LocalDateTime.now(), Order.OrderStatus.PENDING, orderItems);
