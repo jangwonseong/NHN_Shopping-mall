@@ -197,6 +197,26 @@ public class OrderRepositoryImpl implements OrderRepository {
         return orders;
     }
 
+    @Override
+    public List<Order> findByUserIdWithPagination(String userId, int offset, int limit) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        String sql = "SELECT order_id, user_id, total_price, order_date, status FROM orders WHERE user_id = ? LIMIT ? OFFSET ?";
+        List<Order> orders = new ArrayList<>();
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, userId);
+            pstmt.setInt(2, limit);
+            pstmt.setInt(3, offset);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    orders.add(mapOrder(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("사용자 주문 조회(페이징) 실패", e);
+        }
+        return orders;
+    }
+
     // 📌 ResultSet -> Order 변환 메서드
     private Order mapOrder(ResultSet rs) throws SQLException {
         return new Order(

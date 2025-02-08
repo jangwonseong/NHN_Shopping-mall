@@ -11,4 +11,5 @@ public interface OrderService {
     Optional<Order> getOrderById(String orderId);
     List<Order> getOrdersByUserId(String userId);
     List<Order> getAllOrders();
+    List<Order> getOrdersByUserIdWithPagination(String userId, int page, int size);
 }

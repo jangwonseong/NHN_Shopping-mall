@@ -106,4 +106,16 @@ public class OrderServiceImpl implements OrderService {
         }
         return orders;
     }
+
+    @Override
+    public List<Order> getOrdersByUserIdWithPagination(String userId, int page, int size) {
+        int offset = (page - 1) * size; // 페이지 번호에 따라 OFFSET 계산
+        List<Order> orders = orderRepository.findByUserIdWithPagination(userId, offset, size);
+
+        // 각 주문에 대해 주문 상품을 추가
+        for (Order order : orders) {
+            order.setOrderItems(orderItemService.getOrderItems(order.getOrderId()));
+        }
+        return orders;
+    }
 }

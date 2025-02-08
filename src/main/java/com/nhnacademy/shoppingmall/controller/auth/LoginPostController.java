@@ -33,19 +33,22 @@ public class LoginPostController implements BaseController {
         String password = req.getParameter("user_password");
 
         try {
-            // LoginResponse DTO를 받아옴
+            // 로그인 처리
             LoginResponse loginResponse = userService.doLogin(userId, password);
 
-            HttpSession session = req.getSession(); // 기본값 true
-            // 세션에 LoginResponse DTO 저장
+            HttpSession session = req.getSession();
             session.setAttribute("loginResponse", loginResponse);
+
+            // User 객체 직접 조회 후 세션에 저장
+            User user = userService.getUser(userId);
+            session.setAttribute("user", user);
+
             session.setMaxInactiveInterval(60 * 60);
-            return "redirect:/loginAction.do"; // 뷰 리졸버를 거쳐서 처리
+            return "redirect:/index.do";
         } catch (UserNotFoundException e) {
             req.setAttribute("loginError", "로그인 정보가 올바르지 않습니다.");
-            return "shop/login/login_form"; // 로그인 폼으로 forward
+            return "shop/login/login_form";
         } catch (Exception e) {
-            // 기타 예외 처리
             req.setAttribute("loginError", "로그인 처리 중 오류가 발생했습니다.");
             return "shop/login/login_form";
         }

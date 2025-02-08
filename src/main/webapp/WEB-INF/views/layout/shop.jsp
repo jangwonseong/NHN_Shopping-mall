@@ -33,6 +33,7 @@
         User user = (User) request.getSession().getAttribute("user");
         request.setAttribute("user", user);
     %>
+
 </head>
 <body>
 <div class="mainContainer">
@@ -60,6 +61,7 @@
                     <c:when test="${not empty user}">
                         <div class="text-end">
                             <a href="/logout.do" class="btn btn-light">로그아웃</a>
+                            <a href="/mypage.do" class="btn btn-light">마이페이지</a>
                         </div>
                     </c:when>
                     <c:otherwise>
@@ -69,6 +71,7 @@
                         </div>
                     </c:otherwise>
                 </c:choose>
+
 
                 <div class = "shopping-cart">
                     <i class="bi bi-bag"></i>

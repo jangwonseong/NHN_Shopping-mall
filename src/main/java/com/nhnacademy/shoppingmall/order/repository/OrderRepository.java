@@ -21,4 +21,6 @@ public interface OrderRepository {
 
     List<Order> findByStatus(Order.OrderStatus status);
 
+    List<Order> findByUserIdWithPagination(String userId, int offset, int limit);
+
 }
