@@ -2,6 +2,7 @@ package com.nhnacademy.shoppingmall.controller.auth;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
+import com.nhnacademy.shoppingmall.common.mvc.controller.ServiceFactory;
 import com.nhnacademy.shoppingmall.user.dto.UserCreateRequest;
 import com.nhnacademy.shoppingmall.user.service.UserService;
 import com.nhnacademy.shoppingmall.user.service.UserRegisterService;
@@ -16,9 +17,10 @@ public class SignUpPostController implements BaseController {
     private final UserService userService;
     private final UserRegisterService userRegisterService;
 
-    public SignUpPostController(UserService userService, UserRegisterService userRegisterService) {
-        this.userService = userService;
-        this.userRegisterService = userRegisterService;
+    public SignUpPostController() {
+        ServiceFactory serviceFactory = ServiceFactory.getInstance();
+        this.userService = serviceFactory.getUserService();
+        this.userRegisterService = serviceFactory.getUserRegisterService();
     }
 
     @Override

@@ -40,18 +40,10 @@ public class FrontServlet extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String viewName = null;
         try {
-            //todo#7-3 Connection pool로 부터 connection 할당 받습니다.
             DbConnectionThreadLocal.initialize();
-
             BaseController baseController = (BaseController) controllerFactory.getController(req);
-            if (baseController instanceof LoginPostController) {
-                LoginPostController loginPostController = (LoginPostController) baseController;
-                loginPostController.setUserService(new UserServiceImpl(new UserRepositoryImpl(),new UserRegisterServiceImpl(new UserRepositoryImpl())));
-            }
             viewName = baseController.execute(req, resp);
-
             processView(req, resp, viewName);
-
         } catch (Throwable e) {
             log.error("error:{}", e);
             handleException(req, resp, (Exception) e);
@@ -59,10 +51,10 @@ public class FrontServlet extends HttpServlet {
                 httpExceiption.getStatusCode();
             }
         } finally {
-            //todo#7-4 connection을 반납합니다.
             DbConnectionThreadLocal.reset();
         }
     }
+
 
     private void processView(HttpServletRequest req, HttpServletResponse resp, String viewName) throws ServletException, IOException {
         if (viewName != null && viewResolver.isRedirect(viewName)) {

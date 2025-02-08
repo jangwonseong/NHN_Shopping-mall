@@ -18,5 +18,5 @@ public interface ProductService {
 
     List<Product> getProductsByCategory(String categoryId);
 
-    List<Product> getProductsByPriceRange(int minPrice, int maxPrice);
+    List<Product> getProductsBySearch(String keyword);
 }

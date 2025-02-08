@@ -164,33 +164,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findByPriceRange(int minPrice, int maxPrice) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
-        String sql = "SELECT * FROM products WHERE product_price BETWEEN ? AND ?";
-        List<Product> productList = new ArrayList<>();
-
-        try (PreparedStatement ptmt = connection.prepareStatement(sql)) {
-            ptmt.setInt(1, minPrice);
-            ptmt.setInt(2, maxPrice);
-
-            try (ResultSet rs = ptmt.executeQuery()) {
-                while (rs.next()) {
-                    productList.add(new Product(
-                            rs.getString("product_id"),
-                            rs.getString("category_id"),
-                            rs.getString("product_name"),
-                            rs.getString("description"),
-                            rs.getInt("product_price"),
-                            rs.getInt("product_stock")
-                    ));
-                }
-
-            }
-        } catch (SQLException e) {
-            log.error("전체 품목 조회 실패 - SQL 상태: {}, 에러 코드: {}, 메시지: {}",
-                    e.getSQLState(), e.getErrorCode(), e.getMessage(), e);
-            throw new RuntimeException("전체 품목 정보 조회 실패", e);
-        }
-        return productList;
+    public List<Product> searchProducts(String keyword) {
+        return List.of();
     }
 }

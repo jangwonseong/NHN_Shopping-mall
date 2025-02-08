@@ -11,5 +11,5 @@ public interface ProductRepository {
     Optional<Product> findById(String productId);
     List<Product> findByCategoryId(String categoryId);
     List<Product> findAll();
-    List<Product> findByPriceRange(int minPrice, int maxPrice);
+    List<Product> searchProducts(String keyword);
 }

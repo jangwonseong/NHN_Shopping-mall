@@ -7,6 +7,8 @@ import com.nhnacademy.shoppingmall.category.service.impl.CategoryServiceImpl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 
+import com.nhnacademy.shoppingmall.common.mvc.controller.ServiceFactory;
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.repository.impl.ProductRepositoryImpl;
 import com.nhnacademy.shoppingmall.product.service.ProductService;
@@ -18,32 +20,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(method = RequestMapping.Method.GET, value = {"/index.do"})
+@RequestMapping(method = RequestMapping.Method.GET, value = "/index.do")
 public class IndexController implements BaseController {
-    private final ProductService productService = new ProductServiceImpl(new ProductRepositoryImpl());
-    private final CategoryService categoryService = new CategoryServiceImpl(new CategoryRepositoryImpl());
+    private final ProductService productService;
+    private final CategoryService categoryService;
+
+    public IndexController() {
+        ServiceFactory serviceFactory = ServiceFactory.getInstance();
+        this.productService = serviceFactory.getProductService();
+        this.categoryService = serviceFactory.getCategoryService();
+    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        // 상품과 카테고리 목록 가져오기
-        List<Product> productList = productService.getAllProducts();
-        List<Category> categories = categoryService.getAllCategories();
+        // 파라미터 받기
+        String categoryId = req.getParameter("categoryId");
+        String search = req.getParameter("search");
+        String pageParam = req.getParameter("page");
 
-        // 카테고리 ID -> 카테고리 이름 매핑
-        Map<String, String> categoryMap = new HashMap<>();
-        for (Category category : categories) {
-            categoryMap.put(category.getCategoryId(), category.getCategoryName());
+        // 상품 목록 조회
+        List<Product> products;
+        if (search != null && !search.trim().isEmpty()) {
+            products = productService.getProductsBySearch(search);
+        } else if (categoryId != null && !categoryId.trim().isEmpty()) {
+            products = productService.getProductsByCategory(categoryId);
+        } else {
+            products = productService.getAllProducts();
         }
 
-        // 로그 추가 (디버깅용)
-        System.out.println("상품 개수: " + productList.size());
-        System.out.println("카테고리 개수: " + categories.size());
-        System.out.println("categoryMap: " + categoryMap);
+        // 카테고리 정보 조회
+        List<Category> categories = categoryService.getAllCategories();
 
-        // JSP에서 사용할 속성 설정
-        req.setAttribute("products", productList);
-        req.setAttribute("categoryMap", categoryMap);
+        // request에 데이터 설정
+        req.setAttribute("products", products);
+        req.setAttribute("categories", categories);
 
-        return "/shop/main/index"; // JSP 파일 경로
+        return "shop/product/product_list";
     }
 }

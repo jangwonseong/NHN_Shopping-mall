@@ -4,6 +4,7 @@ import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
 import com.nhnacademy.shoppingmall.product.service.ProductService;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ProductServiceImpl implements ProductService {
@@ -53,7 +54,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProductsByPriceRange(int minPrice, int maxPrice) {
-        return productRepository.findByPriceRange(minPrice, maxPrice);
+    public List<Product> getProductsBySearch(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        return productRepository.searchProducts(keyword);
     }
 }

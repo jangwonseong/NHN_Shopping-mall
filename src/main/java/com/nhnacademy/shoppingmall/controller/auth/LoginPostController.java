@@ -2,6 +2,7 @@ package com.nhnacademy.shoppingmall.controller.auth;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
+import com.nhnacademy.shoppingmall.common.mvc.controller.ServiceFactory;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.dto.LoginResponse;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
@@ -13,19 +14,12 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping(method = RequestMapping.Method.POST, value = "/loginAction.do")
 public class LoginPostController implements BaseController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public LoginPostController() {
-        // 기본 생성자
+        this.userService = ServiceFactory.getInstance().getUserService();
     }
 
-    public LoginPostController(UserService userService) {
-        this.userService = userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {

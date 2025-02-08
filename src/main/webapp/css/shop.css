@@ -22,7 +22,21 @@ body {
     color: #000; /* 아이콘 색상 */
 }
 
-.shopping-cart{
-    font-size: 1.5rem; /* 아이콘 크기 조정 */
-    color: #000; /* 아이콘 색상 */
+.shopping-cart {
+    position: relative;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.shopping-cart:hover {
+    background-color: #f8f9fa;
+    border-radius: 50%;
+}
+
+.shopping-cart .badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 0.7rem;
+    transform: translate(25%, -25%);
 }

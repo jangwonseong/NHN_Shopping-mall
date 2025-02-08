@@ -25,18 +25,8 @@ import java.util.concurrent.ConcurrentMap;
 public class ControllerFactory {
     public static final String CONTEXT_CONTROLLER_FACTORY_NAME = "CONTEXT_CONTROLLER_FACTORY";
     private final ConcurrentMap<String, Object> beanMap = new ConcurrentHashMap<>();
-    private final UserService userService;
-    private final UserRegisterService userRegisterService;
 
     public ControllerFactory() {
-        // UserRepository 생성
-        UserRepository userRepository = new UserRepositoryImpl();
-
-        // UserRegisterService 생성
-        this.userRegisterService = new UserRegisterServiceImpl(userRepository);
-
-        // UserService 생성 (UserRegisterService를 주입)
-        this.userService = new UserServiceImpl(userRepository, userRegisterService);
     }
 
     public void initialize(Set<Class<?>> c, ServletContext ctx) {
@@ -70,21 +60,6 @@ public class ControllerFactory {
     }
 
     private Object createControllerInstance(Class<?> controllerClass) throws Exception {
-        // SignUpPostController와 같은 특정 컨트롤러에 의존성을 주입
-        if (controllerClass.equals(SignUpPostController.class)) {
-            return new SignUpPostController(userService, userRegisterService);
-        }
-
-        // LoginPostController에 UserService 주입
-        if (controllerClass.equals(LoginPostController.class)) {
-            return new LoginPostController(userService);
-        }
-
-        // UserUpdateController에 대한 처리 추가
-        if (controllerClass.equals(UserUpdateController.class)) {
-            return new UserUpdateController(userService);
-        }
-
         // 기본적으로 인자가 없는 생성자를 사용하여 객체 생성
         return controllerClass.getDeclaredConstructor().newInstance();
     }

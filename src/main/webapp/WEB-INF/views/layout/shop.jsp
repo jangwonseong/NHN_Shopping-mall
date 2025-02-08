@@ -73,9 +73,17 @@
                 </c:choose>
 
 
-                <div class = "shopping-cart">
-                    <i class="bi bi-bag"></i>
+                <div class="shopping-cart">
+                    <a href="/cart/list.do" class="text-dark text-decoration-none">
+                        <i class="bi bi-bag fs-4"></i>
+                        <c:if test="${not empty cartItems}">
+            <span class="badge bg-danger rounded-pill position-absolute">
+                    ${fn:length(cartItems)}
+            </span>
+                        </c:if>
+                    </a>
                 </div>
+
             </div>
         </div>
     </header>
