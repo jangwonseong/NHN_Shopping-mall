@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -179,4 +181,36 @@ public class UserRepositoryImpl implements UserRepository {
             throw new RuntimeException("회원 존재 여부 확인 실패", e);
         }
     }
+
+    @Override
+    public List<User> findAll() {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        String sql = "SELECT user_id, user_name, user_birth, user_auth, user_point, created_at, latest_login_at " +
+                "FROM users ORDER BY created_at DESC";
+        List<User> userList = new ArrayList<>();
+
+        try (PreparedStatement ptmt = connection.prepareStatement(sql);
+             ResultSet rs = ptmt.executeQuery()) {
+
+            while (rs.next()) {
+                User user = new User(
+                        rs.getString("user_id"),
+                        rs.getString("user_name"),
+                        null,  // 비밀번호는 제외
+                        rs.getString("user_birth"),
+                        User.Auth.valueOf(rs.getString("user_auth")),
+                        rs.getInt("user_point"),
+                        rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : null,
+                        rs.getTimestamp("latest_login_at") != null ? rs.getTimestamp("latest_login_at").toLocalDateTime() : null
+                );
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            log.error("전체 회원 조회 실패 - SQL 상태: {}, 에러 코드: {}, 메시지: {}",
+                    e.getSQLState(), e.getErrorCode(), e.getMessage(), e);
+            throw new RuntimeException("전체 회원 정보 조회 실패", e);
+        }
+        return userList;
+    }
+
 }

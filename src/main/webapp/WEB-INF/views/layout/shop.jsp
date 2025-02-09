@@ -48,12 +48,15 @@
 
                 <!-- 검색창 -->
                 <div class="search-container">
-                    <div class="input-group">
-                        <input type="search" class="form-control form-control-dark" placeholder="브랜드, 상품, 프로필, 태그 등">
-                        <span class="input-group-text">
-                        <i class="bi bi-search"></i> <!-- 아이콘 -->
-                    </span>
-                    </div>
+                    <form action="/index.do" method="GET" class="d-flex">
+                        <div class="input-group">
+                            <input type="search" name="search" class="form-control form-control-dark"
+                                   value="${param.search}" placeholder="브랜드, 상품, 프로필, 태그 등">
+                            <button type="submit" class="input-group-text btn btn-outline-dark">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 <!-- 로그인 및 회원가입 버튼 -->

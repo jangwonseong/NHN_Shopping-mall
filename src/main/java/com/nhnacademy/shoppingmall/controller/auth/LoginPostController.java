@@ -37,6 +37,10 @@ public class LoginPostController implements BaseController {
             User user = userService.getUser(userId);
             session.setAttribute("user", user);
 
+            if (User.Auth.ROLE_ADMIN.equals(user.getUserAuth())){
+                return "redirect:/admin/index.do";
+            }
+
             session.setMaxInactiveInterval(60 * 60);
             return "redirect:/index.do";
         } catch (UserNotFoundException e) {

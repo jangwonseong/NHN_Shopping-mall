@@ -1,18 +1,13 @@
 package com.nhnacademy.shoppingmall.controller.index;
 
 import com.nhnacademy.shoppingmall.category.domain.Category;
-import com.nhnacademy.shoppingmall.category.repository.impl.CategoryRepositoryImpl;
 import com.nhnacademy.shoppingmall.category.service.CategoryService;
-import com.nhnacademy.shoppingmall.category.service.impl.CategoryServiceImpl;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 
 import com.nhnacademy.shoppingmall.common.mvc.controller.ServiceFactory;
-import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
-import com.nhnacademy.shoppingmall.product.repository.impl.ProductRepositoryImpl;
 import com.nhnacademy.shoppingmall.product.service.ProductService;
-import com.nhnacademy.shoppingmall.product.service.impl.ProductServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -22,6 +17,7 @@ import java.util.Map;
 
 @RequestMapping(method = RequestMapping.Method.GET, value = "/index.do")
 public class IndexController implements BaseController {
+    private static final int ITEMS_PER_PAGE = 8;  // 한 페이지당 상품 수
     private final ProductService productService;
     private final CategoryService categoryService;
 
@@ -33,28 +29,48 @@ public class IndexController implements BaseController {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        // 파라미터 받기
-        String categoryId = req.getParameter("categoryId");
+        // 검색어와 페이지 파라미터 받기
         String search = req.getParameter("search");
-        String pageParam = req.getParameter("page");
+        int currentPage = getCurrentPage(req.getParameter("page"));
 
         // 상품 목록 조회
-        List<Product> products;
+        List<Product> allProducts;
         if (search != null && !search.trim().isEmpty()) {
-            products = productService.getProductsBySearch(search);
-        } else if (categoryId != null && !categoryId.trim().isEmpty()) {
-            products = productService.getProductsByCategory(categoryId);
+            allProducts = productService.getProductsBySearch(search);
         } else {
-            products = productService.getAllProducts();
+            allProducts = productService.getAllProducts();
         }
 
-        // 카테고리 정보 조회
+        // 페이징 처리
+        int totalProducts = allProducts.size();
+        int totalPages = (int) Math.ceil((double) totalProducts / ITEMS_PER_PAGE);
+        int start = (currentPage - 1) * ITEMS_PER_PAGE;
+        int end = Math.min(start + ITEMS_PER_PAGE, totalProducts);
+
+        List<Product> pagedProducts = allProducts.subList(start, end);
+
+        // 카테고리 정보 설정
+        Map<String, String> categoryMap = new HashMap<>();
         List<Category> categories = categoryService.getAllCategories();
+        for (Category category : categories) {
+            categoryMap.put(category.getCategoryId(), category.getCategoryName());
+        }
 
         // request에 데이터 설정
-        req.setAttribute("products", products);
-        req.setAttribute("categories", categories);
+        req.setAttribute("products", pagedProducts);
+        req.setAttribute("categoryMap", categoryMap);
+        req.setAttribute("currentPage", currentPage);
+        req.setAttribute("totalPages", totalPages);
 
         return "shop/product/product_list";
+    }
+
+    private int getCurrentPage(String pageParam) {
+        try {
+            int page = Integer.parseInt(pageParam);
+            return page > 0 ? page : 1;
+        } catch (NumberFormatException e) {
+            return 1;
+        }
     }
 }

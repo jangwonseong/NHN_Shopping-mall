@@ -9,6 +9,7 @@ import com.nhnacademy.shoppingmall.user.service.UserRegisterService;
 import com.nhnacademy.shoppingmall.user.service.UserService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -68,4 +69,10 @@ public class UserServiceImpl implements UserService {
 
         return loginResponse;
     }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
 }
