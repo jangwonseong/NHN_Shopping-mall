@@ -78,9 +78,13 @@
         <div>
           <a href="/cart/clear.do" class="btn btn-outline-danger me-2"
              onclick="return confirm('장바구니를 비우시겠습니까?');">장바구니 비우기</a>
-          <a href="/order/checkout.do" class="btn btn-primary">주문하기</a>
+          <form action="/order/process.do" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-primary"
+                    onclick="return confirm('결제하시겠습니까?');">결제하기</button>
+          </form>
         </div>
       </div>
+
     </c:otherwise>
   </c:choose>
 </div>

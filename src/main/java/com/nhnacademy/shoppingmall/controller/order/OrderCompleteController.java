@@ -14,9 +14,10 @@ import java.util.Optional;
 public class OrderCompleteController implements BaseController {
     private final OrderService orderService;
 
-    public OrderCompleteController(OrderService orderService) {
-        this.orderService = orderService;
+    public OrderCompleteController() {
+        this.orderService = ServiceFactory.getInstance().getOrderService();
     }
+
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String orderId = req.getParameter("orderId");
@@ -24,8 +25,9 @@ public class OrderCompleteController implements BaseController {
 
         if (order.isPresent()) {
             req.setAttribute("order", order.get());
-            return "order/complete";
+            return "shop/payment/payment";
+        } else {
+            return "redirect:/error.do";
         }
-        return "redirect:/error.do";
     }
 }
