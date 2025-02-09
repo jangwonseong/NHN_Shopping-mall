@@ -9,4 +9,5 @@ public interface CartItemService {
     void removeFromCart(String userId, String productId);
     void updateQuantity(String userId, String productId, int quantity);
     List<CartItem> getCartItems(String userId);
+
 }

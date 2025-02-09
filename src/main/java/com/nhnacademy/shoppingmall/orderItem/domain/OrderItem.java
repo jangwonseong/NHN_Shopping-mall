@@ -19,6 +19,4 @@ public class OrderItem {
         this.quantity = quantity;
         this.priceAtOrder = priceAtOrder;
     }
-
-    // Getter & Setter
 }

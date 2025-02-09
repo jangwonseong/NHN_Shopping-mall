@@ -1,12 +1,14 @@
 package com.nhnacademy.shoppingmall.cart.service.impl;
 
 import com.nhnacademy.shoppingmall.cart.domain.CartItem;
+import com.nhnacademy.shoppingmall.cart.domain.CartItemWithProduct;
 import com.nhnacademy.shoppingmall.cart.repository.CartItemRepository;
 import com.nhnacademy.shoppingmall.cart.service.CartItemService;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,4 +61,18 @@ public class CartItemServiceImpl implements CartItemService {
     public List<CartItem> getCartItems(String userId) {
         return cartItemRepository.findByUserId(userId);
     }
+
+    @Override
+    public List<CartItemWithProduct> getCartItems(String userId) {
+        List<CartItem> cartItems = cartItemRepository.findByUserId(userId);
+        List<CartItemWithProduct> result = new ArrayList<>();
+
+        for (CartItem item : cartItems) {
+            Product product = productService.getProduct(item.getProductId());
+            result.add(new CartItemWithProduct(item, product));
+        }
+
+        return result;
+    }
+
 }
