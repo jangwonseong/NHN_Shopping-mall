@@ -1,6 +1,7 @@
 package com.nhnacademy.shoppingmall.controller.order;
 
 import com.nhnacademy.shoppingmall.cart.domain.CartItem;
+import com.nhnacademy.shoppingmall.cart.domain.CartItemWithProduct;
 import com.nhnacademy.shoppingmall.cart.service.CartItemService;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
@@ -8,6 +9,9 @@ import com.nhnacademy.shoppingmall.common.mvc.controller.ServiceFactory;
 import com.nhnacademy.shoppingmall.order.domain.Order;
 import com.nhnacademy.shoppingmall.order.service.OrderService;
 import com.nhnacademy.shoppingmall.orderItem.domain.OrderItem;
+import com.nhnacademy.shoppingmall.product.domain.Product;
+import com.nhnacademy.shoppingmall.product.service.ProductService;
+import com.nhnacademy.shoppingmall.thread.channel.RequestChannel;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,43 +26,28 @@ import java.util.UUID;
 public class PlaceOrderController implements BaseController {
     private final OrderService orderService;
     private final CartItemService cartItemService;
+    private final RequestChannel requestChannel;
 
-    public PlaceOrderController() {
-        ServiceFactory serviceFactory = ServiceFactory.getInstance();
-        this.orderService = serviceFactory.getOrderService();
-        this.cartItemService = serviceFactory.getCartItemService();
+    public PlaceOrderController(OrderService orderService,CartItemService cartItemService,RequestChannel requestChannel) {
+        this.orderService = orderService;
+        this.cartItemService = cartItemService;
+        this.requestChannel = requestChannel;
     }
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        HttpSession session = req.getSession(false);
         User user = (User) session.getAttribute("user");
         List<CartItem> cartItems = cartItemService.getCartItems(user.getUserId());
 
-        List<OrderItem> orderItems = new ArrayList<>();
-        int totalPrice = 0;
-
-        for (CartItem item : cartItems) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setProductId(item.getProductId());
-            orderItem.setQuantity(item.getQuantity());
-            orderItem.setPriceAtOrder(item.getProduct().getProductPrice());
-            orderItems.add(orderItem);
-            totalPrice += item.getQuantity() * item.get().getProductPrice();
-        }
-
-        Order order = new Order(
-                UUID.randomUUID().toString(),
-                user.getUserId(),
-                totalPrice,
-                LocalDateTime.now(),
-                Order.OrderStatus.PENDING,
-                orderItems
-        );
+        Order order = createOrder(user, cartItems);
 
         try {
             orderService.placeOrder(order);
-            cartItemService.getCartItems(user.getUserId()).clear();
+            // 포인트 적립 요청 (비동기)
+            requestChannel.add(new PointRequest(user.getUserId(), (int)(order.getTotalPrice() * 0.1)));
+            // 장바구니 비우기
+            clearCart(user.getUserId(), cartItems);
+
             return "redirect:/order/complete.do?orderId=" + order.getOrderId();
         } catch (Exception e) {
             req.setAttribute("error", e.getMessage());

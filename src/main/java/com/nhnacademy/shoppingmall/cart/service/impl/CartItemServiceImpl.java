@@ -63,7 +63,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public List<CartItemWithProduct> getCartItems(String userId) {
+    public List<CartItemWithProduct> getCartItemsWithProduct(String userId) {
         List<CartItem> cartItems = cartItemRepository.findByUserId(userId);
         List<CartItemWithProduct> result = new ArrayList<>();
 
