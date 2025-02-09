@@ -67,29 +67,45 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public int update(Product product) {
         Connection connection = DbConnectionThreadLocal.getConnection();
-        String sql = """
+
+        // 카테고리 ID 유효성 검사
+        String validateSql = "SELECT COUNT(*) FROM categories WHERE category_id = ?";
+
+        try (PreparedStatement validateStmt = connection.prepareStatement(validateSql)) {
+            validateStmt.setString(1, product.getCategoryId());
+            try (ResultSet rs = validateStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) == 0) {
+                    throw new RuntimeException("유효하지 않은 카테고리 ID: " + product.getCategoryId());
+                }
+            }
+
+            // 유효성 검사 통과 후 업데이트 수행
+            String updateSql = """
                 UPDATE products
                 SET category_id = ?, 
                     product_name = ?, 
-                    description = ?,
+                    description = ?,    
                     product_price = ?, 
                     product_stock = ?
                 WHERE product_id = ?
                 """;
-        try (PreparedStatement ptmt = connection.prepareStatement(sql)) {
-            ptmt.setString(1, product.getCategoryId());
-            ptmt.setString(2, product.getProductName());
-            ptmt.setString(3, product.getProductDescription());
-            ptmt.setInt(4, product.getProductPrice());
-            ptmt.setInt(5, product.getProductStock());
-            ptmt.setString(6, product.getProductId());
-            return ptmt.executeUpdate();
+
+            try (PreparedStatement ptmt = connection.prepareStatement(updateSql)) {
+                ptmt.setString(1, product.getCategoryId());
+                ptmt.setString(2, product.getProductName());
+                ptmt.setString(3, product.getProductDescription());
+                ptmt.setInt(4, product.getProductPrice());
+                ptmt.setInt(5, product.getProductStock());
+                ptmt.setString(6, product.getProductId());
+                return ptmt.executeUpdate();
+            }
         } catch (SQLException e) {
             log.error("품목 수정 실패 - 품목 ID: {}, SQL 상태: {}, 에러 코드: {}, 메시지: {}",
                     product.getProductId(), e.getSQLState(), e.getErrorCode(), e.getMessage(), e);
             throw new RuntimeException("품목 수정 실패", e);
         }
     }
+
 
     @Override
     public Optional<Product> findById(String productId) {
